@@ -1,6 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import './TournamentsList.css';
 import Tournament from '../Tournament/Tournament';
+import { Box, Button } from '@mui/material';
 
 const GET_TOURNAMENTS = gql`
    query Tournaments {
@@ -20,11 +21,31 @@ function TournamentsList() {
  
    return (
       <div className='tournaments-list__wrapper'>
-         {  
-            data.tournaments.map(({ id, date, name }: any) => (
-               <Tournament key={id} name={name} date={date} />
-            ))
-         }
+         <div className='tournaments-list__container'>
+            {  
+               data.tournaments.map(({ id, date, name }: any) => (
+                  <Tournament key={id} name={name} date={date} />
+               ))
+            }
+         </div>
+         <Box
+            sx={{
+               display: 'flex',
+               alignItems: 'center',
+               justifyContent: 'center',
+               width: '100%',
+               boxShadow: '0px -2px 4px rgba(0, 0, 0, 0.1)'
+            }}
+         >
+            <Button
+               sx={{
+                  m: 1,
+                  minWidth: 300
+               }}
+               variant='contained'
+
+            >Create new</Button>
+         </Box>
       </div>
    ) ;
 }

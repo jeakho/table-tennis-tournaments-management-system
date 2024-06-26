@@ -9,9 +9,12 @@ export interface TournamentProps {
 function Tournament({ name, date }: TournamentProps) {
     return (
         <Card sx={{
-            maxWidth: 250, 
-            minHeight: 200,
-            m: 2
+            width: 250, 
+            height: 200,
+            m: 2,
+            '&:hover': {
+                'box-shadow': '0 0 11px rgba(33,33,33,.2)'
+            }
         }}>
             <CardMedia 
                 image='/public/table-tennis.jpg'
