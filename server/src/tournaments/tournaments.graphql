@@ -1,0 +1,9 @@
+type Tournament {
+    id: ID!
+    date: String!
+    name: String!
+}
+
+type Query {
+    tournaments: [Tournament!]!
+}
