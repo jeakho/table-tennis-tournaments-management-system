@@ -5,6 +5,8 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TournamentsModule } from './tournaments/tournaments.module';
 import { join } from 'path';
+import { PlayersModule } from './players/players.module';
+import { IntegerIdScalar } from './scalars/integer-id';
 
 @Module({
   imports: [
@@ -16,9 +18,10 @@ import { join } from 'path';
         outputAs: 'class',
       }
     }),
-    TournamentsModule
+    TournamentsModule,
+    PlayersModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, IntegerIdScalar],
 })
 export class AppModule {}

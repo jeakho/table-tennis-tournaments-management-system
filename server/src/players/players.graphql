@@ -1,0 +1,19 @@
+scalar IntegerID
+
+
+input RatingRange {
+    from: Float
+    to: Float
+}
+
+
+type Player {
+    id: IntegerID!
+    fullName: String!
+    yearOfBirth: Int!
+    rating: Float!
+}
+
+type Query {
+    topPlayers(nameStartsWith: String, ratingFrom: Float, ratingTo: Float): [Player!]!
+}

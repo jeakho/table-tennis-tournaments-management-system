@@ -6,7 +6,7 @@ export class TournamentsResolver {
     constructor(private tournamentsService: TournamentsService) { }
 
     @Query('tournaments')
-    async getTournaments() {
-        return await this.tournamentsService.getTournaments();
+    getTournaments() {
+        return this.tournamentsService.getTournaments();
     }
 }

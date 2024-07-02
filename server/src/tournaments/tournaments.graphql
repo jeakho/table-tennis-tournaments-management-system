@@ -1,5 +1,7 @@
+scalar IntegerID
+
 type Tournament {
-    id: ID!
+    id: IntegerID!
     date: String!
     name: String!
 }
