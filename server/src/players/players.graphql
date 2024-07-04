@@ -1,19 +1,26 @@
 scalar IntegerID
 
-
-input RatingRange {
-    from: Float
-    to: Float
+enum GENDER {
+    # All
+    Male
+    Female
 }
-
 
 type Player {
     id: IntegerID!
     fullName: String!
-    yearOfBirth: Int!
+    birthYear: Int!
     rating: Float!
+    gender: GENDER!
 }
 
 type Query {
-    topPlayers(nameStartsWith: String, ratingFrom: Float, ratingTo: Float): [Player!]!
+    topPlayers(
+        nameStartsWith: String, 
+        ratingFrom: Float, 
+        ratingTo: Float,
+        birthYearFrom: Int,
+        birthYearTo: Int,
+        gender: GENDER
+    ): [Player!]!
 }

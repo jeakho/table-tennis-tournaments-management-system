@@ -8,20 +8,21 @@
 /* tslint:disable */
 /* eslint-disable */
 
-export class RatingRange {
-    from?: Nullable<number>;
-    to?: Nullable<number>;
+export enum GENDER {
+    Male = "Male",
+    Female = "Female"
 }
 
 export class Player {
     id: IntegerID;
     fullName: string;
-    yearOfBirth: number;
+    birthYear: number;
     rating: number;
+    gender: GENDER;
 }
 
 export abstract class IQuery {
-    abstract topPlayers(nameStartsWith?: Nullable<string>, ratingFrom?: Nullable<number>, ratingTo?: Nullable<number>): Player[] | Promise<Player[]>;
+    abstract topPlayers(nameStartsWith?: Nullable<string>, ratingFrom?: Nullable<number>, ratingTo?: Nullable<number>, birthYearFrom?: Nullable<number>, birthYearTo?: Nullable<number>, gender?: Nullable<GENDER>): Player[] | Promise<Player[]>;
 
     abstract tournaments(): Tournament[] | Promise<Tournament[]>;
 }

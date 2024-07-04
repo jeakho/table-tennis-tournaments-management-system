@@ -1,22 +1,22 @@
 import { Box, Card, CardContent, TextField } from "@mui/material";
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import { PlayersFilterOptions } from "./Players";
 import { debounce } from "lodash";
+import GenderSelect from "./GenderSelect";
 
 
 interface FilterPanelProps {
     filters: PlayersFilterOptions;
     onFiltersChange: (filters: PlayersFilterOptions) => void;
-  }
+}
 
 
 function FilterOptionsPanel({ filters, onFiltersChange }: FilterPanelProps) {
     const [filterPanelShown, setFilterPanelShown] = useState(false);
 
-    const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
+    const handleChange = ({ name, value }: {name: string, value: string}) => {
         const newFilters = { ...filters, [name]: value ? (isNaN(parseFloat(value)) ? value : parseFloat(value)) : undefined };
         onFiltersChange(newFilters);
     }
@@ -42,7 +42,7 @@ function FilterOptionsPanel({ filters, onFiltersChange }: FilterPanelProps) {
                 size="small" 
                 label="Name" 
                 variant="outlined"
-                onChange={ debounce(handleChange, 500) }
+                onChange={ debounce(({ target }) => handleChange({ name: target.name, value: target.value }), 500) }
             />
 
 
@@ -50,7 +50,7 @@ function FilterOptionsPanel({ filters, onFiltersChange }: FilterPanelProps) {
                 m: '20px 10px',
                 display: filterPanelShown ? 'block' : 'none'
             }} >
-                <CardContent>
+                <CardContent sx={{ display: 'flex' }}>
                     <Box sx={{ textAlign: 'center', display: 'flex', alignItems: 'center' }}>
                         Rating:
                         <TextField
@@ -58,18 +58,36 @@ function FilterOptionsPanel({ filters, onFiltersChange }: FilterPanelProps) {
                             size="small" 
                             sx={{ ml: 3, width: '100px' }} 
                             label="from"
-                            onChange={ debounce(handleChange, 500) }
+                            onChange={ debounce(({ target }) => handleChange({ name: target.name, value: target.value }), 500) }
                         />
                         <TextField
                             name="ratingTo"
                             size="small" 
                             sx={{ ml: 1, width: '80px' }} 
                             label="to"
-                            onChange={ debounce(handleChange, 500) }
+                            onChange={ debounce(({ target }) => handleChange({ name: target.name, value: target.value }), 500) }
+                        />
+                    </Box>
+                    <Box sx={{ textAlign: 'center', display: 'flex', alignItems: 'center', ml: 2 }}>
+                        Birth Year:
+                        <TextField
+                            name="birthYearFrom"
+                            size="small" 
+                            sx={{ ml: 3, width: '100px' }} 
+                            label="from"
+                            onChange={ debounce(({ target }) => handleChange({ name: target.name, value: target.value }), 500) }
+                        />
+                        <TextField
+                            name="birthYearTo"
+                            size="small" 
+                            sx={{ ml: 1, width: '80px' }} 
+                            label="to"
+                            onChange={ debounce(({ target }) => handleChange({ name: target.name, value: target.value }), 500) }
                         />
                     </Box>
                 </CardContent>
             </Card>
+            <GenderSelect onGenderChange={handleChange} />
         </Box>
     )
 }

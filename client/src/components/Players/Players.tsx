@@ -9,14 +9,32 @@ export interface PlayersFilterOptions {
     nameStartsWith?: string;
     ratingFrom?: number;
     ratingTo?: number;
+    birthYearFrom?: number;
+    birthYearTo?: number;
+    gender?: string;
 }
 
 const GET_TOP_PLAYERS = gql`
-    query TopPlayers($nameStartsWith: String, $ratingFrom: Float, $ratingTo: Float) {
-        topPlayers(nameStartsWith: $nameStartsWith, ratingFrom: $ratingFrom, ratingTo: $ratingTo) {
+    query TopPlayers(
+        $nameStartsWith: String, 
+        $ratingFrom: Float, 
+        $ratingTo: Float,
+        $birthYearFrom: Int,
+        $birthYearTo: Int,
+        $gender: GENDER
+    ) {
+        topPlayers(
+            nameStartsWith: $nameStartsWith, 
+            ratingFrom: $ratingFrom, 
+            ratingTo: $ratingTo,
+            birthYearFrom: $birthYearFrom,
+            birthYearTo: $birthYearTo,
+            gender: $gender
+        ) {
             id
             fullName
-            yearOfBirth
+            gender
+            birthYear
             rating
         }
     }
@@ -60,16 +78,18 @@ function Players() {
                         <TableHead sx={{ fontWeight: 'bold' }}>
                             <TableRow>
                                 <TableCell align="left">Name</TableCell>
-                                <TableCell align="left">Year of Birth</TableCell>
+                                <TableCell align="left">Gender</TableCell>
+                                <TableCell align="left">Birth Year</TableCell>
                                 <TableCell align="left">Rating</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {
-                                data?.topPlayers.map(({ id, fullName, yearOfBirth, rating }) => 
+                                data?.topPlayers.map(({ id, fullName, gender, birthYear, rating }) => 
                                     <TableRow key={id}>
                                         <TableCell align="left">{ fullName }</TableCell>
-                                        <TableCell align="left">{ yearOfBirth }</TableCell>
+                                        <TableCell align="left">{ gender }</TableCell>
+                                        <TableCell align="left">{ birthYear }</TableCell>
                                         <TableCell align="left">{ rating }</TableCell>
                                     </TableRow>
                                 )
