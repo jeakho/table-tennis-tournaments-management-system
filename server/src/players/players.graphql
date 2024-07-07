@@ -16,6 +16,8 @@ type Player {
 
 type Query {
     topPlayers(
+        offset: Int,
+        limit: Int,
         nameStartsWith: String, 
         ratingFrom: Float, 
         ratingTo: Float,
@@ -23,4 +25,14 @@ type Query {
         birthYearTo: Int,
         gender: GENDER
     ): [Player!]!
+    playersCount(
+        offset: Int,
+        limit: Int,
+        nameStartsWith: String, 
+        ratingFrom: Float, 
+        ratingTo: Float,
+        birthYearFrom: Int,
+        birthYearTo: Int,
+        gender: GENDER
+    ): Int!
 }

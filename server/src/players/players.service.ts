@@ -18,7 +18,48 @@ const players: Player[] = [
 
 @Injectable()
 export class PlayersService {
-    getPlayers(): Player[] {
-        return players;
+    getPlayers(
+        offset?: number,
+        limit?: number,
+        nameStartsWith?: string,
+        ratingFrom?: number,
+        ratingTo?: number,
+        birthYearFrom?: number,
+        birthYearTo?: number,
+        gender?: GENDER
+    ): Player[] {
+        let filteredPlayers = [...players];
+
+        if (ratingFrom) {
+            filteredPlayers = filteredPlayers.filter(player => player.rating >= ratingFrom);
+        }
+        if (ratingTo) {
+            filteredPlayers = filteredPlayers.filter(player => player.rating <= ratingTo);
+        }
+
+        if (birthYearFrom) {
+            filteredPlayers = filteredPlayers.filter(player => player.birthYear >= birthYearFrom);
+        }
+        if (birthYearTo) {
+            filteredPlayers = filteredPlayers.filter(player => player.birthYear <= birthYearTo);
+        }
+
+        if (gender) {
+            filteredPlayers = filteredPlayers.filter(player => player.gender === gender);
+        }
+
+        if (nameStartsWith) {
+            const lowerCaseStartString = nameStartsWith.toLowerCase();
+            filteredPlayers = filteredPlayers.filter(player => {
+                const [firstName, secondName] = player.fullName.split(' ');
+
+                return firstName.toLowerCase().startsWith(lowerCaseStartString) ||
+                    secondName.toLowerCase().startsWith(lowerCaseStartString) ||
+                    player.fullName.toLowerCase().startsWith(lowerCaseStartString);
+            })
+        }
+
+
+        return [...filteredPlayers].sort((p1, p2) => p2.rating - p1.rating).slice(offset || 0, limit ? offset + limit : undefined);
     }
 }

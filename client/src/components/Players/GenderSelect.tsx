@@ -20,7 +20,7 @@ function GenderSelect({ onGenderChange }: GenderSelectProps) {
                 mt: 2
             }}
         >
-            <ToggleButton value="">
+            <ToggleButton selected={ !gender } value="">
                 All
             </ToggleButton>
             <ToggleButton value="Male">

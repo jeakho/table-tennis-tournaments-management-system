@@ -22,7 +22,9 @@ export class Player {
 }
 
 export abstract class IQuery {
-    abstract topPlayers(nameStartsWith?: Nullable<string>, ratingFrom?: Nullable<number>, ratingTo?: Nullable<number>, birthYearFrom?: Nullable<number>, birthYearTo?: Nullable<number>, gender?: Nullable<GENDER>): Player[] | Promise<Player[]>;
+    abstract topPlayers(offset?: Nullable<number>, limit?: Nullable<number>, nameStartsWith?: Nullable<string>, ratingFrom?: Nullable<number>, ratingTo?: Nullable<number>, birthYearFrom?: Nullable<number>, birthYearTo?: Nullable<number>, gender?: Nullable<GENDER>): Player[] | Promise<Player[]>;
+
+    abstract playersCount(offset?: Nullable<number>, limit?: Nullable<number>, nameStartsWith?: Nullable<string>, ratingFrom?: Nullable<number>, ratingTo?: Nullable<number>, birthYearFrom?: Nullable<number>, birthYearTo?: Nullable<number>, gender?: Nullable<GENDER>): number | Promise<number>;
 
     abstract tournaments(): Tournament[] | Promise<Tournament[]>;
 }
