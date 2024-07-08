@@ -8,7 +8,7 @@ export class PlayersResolver {
     constructor(private playersService: PlayersService) {}
 
     @Query('topPlayers')
-    getPlayers(
+    async getPlayers(
         @Args('offset') offset: number | undefined,
         @Args('limit') limit: number | undefined,
         @Args('nameStartsWith') nameStartsWith: string | undefined,
@@ -18,6 +18,7 @@ export class PlayersResolver {
         @Args('birthYearTo') birthYearTo: number | undefined,
         @Args('gender') gender: GENDER | undefined
     ) {
+        await new Promise(resolve => setTimeout(resolve, 1500));
         return this.playersService.getPlayers(
             offset,
             limit,

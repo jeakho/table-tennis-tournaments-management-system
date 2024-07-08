@@ -13,7 +13,7 @@ interface FilterPanelProps {
 }
 
 
-function FilterOptionsPanel({ filters, onFiltersChange }: FilterPanelProps) {
+function PlayersDisplayFilters({ filters, onFiltersChange }: FilterPanelProps) {
     const [filterPanelShown, setFilterPanelShown] = useState(false);
 
     const handleChange = ({ name, value }: {name: string, value: string}) => {
@@ -92,4 +92,4 @@ function FilterOptionsPanel({ filters, onFiltersChange }: FilterPanelProps) {
     )
 }
 
-export default FilterOptionsPanel;
+export default PlayersDisplayFilters;

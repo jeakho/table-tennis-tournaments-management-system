@@ -1,8 +1,10 @@
 import { gql, useQuery } from "@apollo/client";
-import { Box, MenuItem, Pagination, Paper, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import { Box } from "@mui/material";
 import { Player } from "./player";
 import { useState } from "react";
-import FilterOptionsPanel from "./FilterOptionsPanel";
+import PlayersDisplayFilters from "./PlayersDisplayFilters";
+import PlayersDisplay from "./PlayersDisplay";
+import PlayersDisplayControl, { PLAYERS_PER_PAGE_OPTIONS } from "./PlayersDisplayControl";
 
 
 export interface PlayersFilterOptions {
@@ -76,8 +78,6 @@ function computePagesCount(playersCount: number, playersPerPage: number) {
     return Math.ceil(playersCount / playersPerPage);
 }
 
-const PLAYERS_PER_PAGE_OPTIONS = [2, 5, 10];
-
 function Players() {
     const [currentPage, setCurrentPage] = useState(1);
     const [playersPerPage, setPlayersPerPage] = useState(PLAYERS_PER_PAGE_OPTIONS[0]);
@@ -86,7 +86,7 @@ function Players() {
     const { data: playersCount } = useQuery<{ playersCount: number }>(GET_PLAYERS_COUNT, {
         variables: filterOptions
     });
-    const { loading, error, data } = useQuery<{ topPlayers: Player[] }>(GET_TOP_PLAYERS, {
+    const { loading, error, data: playersData } = useQuery<{ topPlayers: Player[] }>(GET_TOP_PLAYERS, {
         variables: { offset: computeOffset(currentPage, playersPerPage), limit: playersPerPage, ...filterOptions }
     });
 
@@ -118,62 +118,24 @@ function Players() {
                     mt: '20px',
                     mb: '20px'
                 }}>
-                    <FilterOptionsPanel filters={filterOptions} onFiltersChange={handleFiltersChange}></FilterOptionsPanel>
+                    <PlayersDisplayFilters filters={filterOptions} onFiltersChange={handleFiltersChange}></PlayersDisplayFilters>
                 </Box>
 
                 {loading && <p>Loading...</p>}
-                {!loading && <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                    <TableContainer component={Paper}>
-                        <Table sx={{ width: '100%' }}>
-                            <TableHead sx={{ fontWeight: 'bold' }}>
-                                <TableRow>
-                                    <TableCell align="left">№</TableCell>
-                                    <TableCell align="left">Name</TableCell>
-                                    <TableCell align="left">Gender</TableCell>
-                                    <TableCell align="left">Birth Year</TableCell>
-                                    <TableCell align="left">Rating</TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {
-                                    data?.topPlayers.map(({ id, fullName, gender, birthYear, rating }, ind) => 
-                                        <TableRow key={id}>
-                                            <TableCell align="left">{ computeOffset(currentPage, playersPerPage) + ind + 1 }</TableCell>
-                                            <TableCell align="left">{ fullName }</TableCell>
-                                            <TableCell align="left">{ gender }</TableCell>
-                                            <TableCell align="left">{ birthYear }</TableCell>
-                                            <TableCell align="left">{ rating }</TableCell>
-                                        </TableRow>
-                                    )
-                                }
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                {!loading && !!playersData && <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <PlayersDisplay playersRecords={
+                        playersData.topPlayers.map((player, ind) => ({ no: computeOffset(currentPage, playersPerPage) + ind + 1, ...player}))
+                    } />
                 </Box>
                 }
-                {!!playersCount?.playersCount &&
-                    <Box sx={{ display: 'flex ', mt: 2, justifyContent: 'center', alignItems: 'center' }}>
-                        <Pagination 
-                            count={ computePagesCount(playersCount.playersCount, playersPerPage) } 
-                            showFirstButton showLastButton 
-                            shape="rounded" 
-                            color="primary"
-                            page={ currentPage }
-                            sx={{ mr: 1 }}
-                            onChange={(_, currentPage) => setCurrentPage(currentPage)}
-                        />
-                        <Select
-                            size="small"
-                            value={ playersPerPage }
-                            onChange={ (e) => handlePlayersPerPageChange(+e.target.value) }
-                        >
-                            {PLAYERS_PER_PAGE_OPTIONS.map((option) => (
-                                <MenuItem key={ option } value={ option }>
-                                    { option }
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </Box>
+                {!!playersCount?.playersCount && 
+                    <PlayersDisplayControl 
+                        currentPage={ currentPage }
+                        pagesCount={ computePagesCount(playersCount.playersCount, playersPerPage )}
+                        playersPerPage={ playersPerPage }
+                        onPageSelect={ setCurrentPage }
+                        onPlayersPerPageChange={ handlePlayersPerPageChange }
+                    />
                 }
             </Box>
         </Box>
